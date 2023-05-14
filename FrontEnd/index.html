@@ -6,22 +6,33 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
-	<script type="text/javascript" src="assets/scripts.js"></script>
+	
 </head>
 <body>
 <header>
+	<div id="edit" class="hide">
+		<button class="edition">
+			<i class="fa-sharp fa-regular fa-pen-to-square"></i>
+		Mode édition</button>
+		<button class="publish">publier les changements</button>
+</div>
+
+<div class="header1">
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
-			<li>projet</li>
+			<li><a href="index.html">projets</a></li>
 			<li>contact</li>
-			<li>login</li>
+			<li><a href="login.html" id="logBtn">login</a></li>
+			<li><a id="logout" class="logout projet-menu hide">logout</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
+</div>
 </header>
 <main>
 	<section id="introduction">
@@ -36,7 +47,9 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2 id="P2">Mes Projets</h2>
+		<h2>Mes Projets</h2>
+		<a href="#" class="modifier" id="modifButton"><i class="fa-regular fa-pen-to-square"></i> modifier</a>
+
 
 
 <!-- partie filtres -->
@@ -56,17 +69,6 @@
 		<div class="gallery">
 		</div>
 
-
-
-
-
-
-
-
-
-
-
-
 	</section>
 	<section id="contact">
 		<h2>Contact</h2>
@@ -83,12 +85,73 @@
 	</section>
 </main>
 
+
+
+	
+<!--Section de la fenêtre modale "modifier"-->
+<section id="sect-modale">
+	<div class="modale">
+		<div id="icones">
+			<i class="fa-solid fa-arrow-left-long" id="arrow"></i>
+			<i class="fa-solid fa-xmark" id="cross"></i>
+		</div>
+
+		<!--Première modale pour supprimer les photos-->
+		<div id="first-modale">
+			<h3>Galerie photo</h3>
+			<div class="modale-gallery"></div>
+			<button id="bouton-ajouter">Ajouter une photo</button>
+			<button id="bouton-supprimer">Supprimer la galerie</button>
+		</div>
+
+		<!--Deuxième modale pour ajouter les photos-->
+		<div id="second-modale">
+			<h3>Ajout photo</h3>
+			<div id="add-photo">
+				<label class="send-image" for="bouton-search"><i class="fa-solid fa-image"></i></label>
+				<label class="send-image" for="bouton-search" id="bouton-add">+ Ajouter image
+					<input type="file" id="bouton-search" accept="image/jpeg,image/png,image/jpg">
+				</label>
+				<label class="send-image" id="subtitle-image">jpg.png : 4mo max</label>
+				<div id="image-preview"></div>
+			</div>
+			<form id="form-image">
+				<label>Titre</label>
+				<input type="text" id="title-image">
+				<label>Catégorie</label>
+				<select id="objet">
+					<option value="1">Objets</option>
+					<option value="2">Appartements</option>
+					<option value="3">Hôtels & restaurants</option>
+				</select>
+			</form>
+			<button id="bouton-valider" type="submit">Valider</button>
+			<div id="add-image-error"></div>
+		</div>
+	</div>
+</section>
+
+<div id="third-modale">
+	<div id="delete-modale">
+		<p>Voulez vous vraiment supprimer cette image ?</p>
+		<div>
+			<button id="confirm-no">Annuler</button>
+			<button id="confirm-yes">Supprimer</button>
+		</div>
+	</div>
+</div>
+
+	
+  
+
 <footer>
 	<nav>
 		<ul>
 			<li>Mentions Légales</li>
 		</ul>
 	</nav>
+	<script type="text/javascript" src="assets/scripts.js"></script>
+	<!--<script src="assets/addpicture.js"></script>-->
 </footer>
 </body>
 </html>

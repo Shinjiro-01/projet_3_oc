@@ -13,26 +13,32 @@
 </head>
 <body>
     <header>
+        <div class="header1">
         <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
         <nav>
             <ul>
-                <li>projet</li>
+                <li><a href="index.html">projets</a></li>
                 <li>contact</li>
-                <li>login</li>
+                <li><a href="login.html">login</a></li>
                 <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
             </ul>
         </nav>
+    </div>
     </header>
     <main>
-
+        <div id="alert" role="alert" class="hide">
+            Email ou mot de passe erronés
+          </div>
+    <section id="login">
         <form action="" method="post" id="login_form">
 			<label for="email">Email</label>
-			<input type="email" name="email" id="email">
+			    <input type="email" name="email" id="email">
 			<label for="password">Password</label>
-			<input type="password" name="password" id="password">
+			    <input type="password" name="password" id="password">
 			<input type="submit" value="Envoyer">
 		</form>
-
+        <p><a href="#">Mot de passe oublié</a></p>
+    </section>
         <footer>
             <script type="text/javascript" src="assets/login.js"></script>
             <nav>

@@ -1,5 +1,5 @@
 
-//appel de l'endpoints works avec fetch//
+//appel de l'API/works avec fetch//
 load_gallery('http://localhost:5678/api/works');
 async function load_gallery(fname) {
     var response = await fetch(fname)
@@ -13,38 +13,26 @@ async function load_gallery(fname) {
         figure.innerHTML =  "<img src=" + data[i].imageUrl  + "> <figcaption>" + data[i].title + "</figcaption>";
         gallery.append(figure);
         figure.classList.add("image");
+        
     }
-
+    // création de la gallery de la modale 
     gallery = document.querySelector(".modale-gallery");
     for (i = 0; i < data.length; i++) {
         let figure = document.createElement("figure");
         figure.setAttribute("data-attributes", data[i].category.id);
         figure.innerHTML =  "<img class='img-modal' src=" + data[i].imageUrl  + ">" ;
-        gallery.append(figure);
+        const trashIcon = document.createElement("i");
+        trashIcon.setAttribute("id",data[i].id,);
+        trashIcon.classList.add("fa-solid", "fa-trash", "icone", "trash");
+        const arrowMoveIcon = document.createElement("i");
+        arrowMoveIcon.classList.add("fa-solid", "fa-arrows-up-down-left-right", "icone", "arrow");
         figure.classList.add("image", "column");
-
-
-        let trash = document.createElement("button");
-        trash.classList.add("hide");
-        trash.innerText = "Suprimer";
-        figure.append(trash);
-        trash.setAttribute("img-id", data[i].id);
-        trash.id = "delete_button";
-        trash.addEventListener("click", (event) => {
-        fetch('http://localhost:5678/api/works/' + event.target.getAttribute("img-id"), {
-            method: 'DELETE',
-            headers: {
-                "Authorization": "Bearer " + sessionStorage.getItem("token")
-            },
-            })
-            .then(res => res.text()) // or res.json()
-            .then(res => console.log(res))     
-            
-});
-
-    }
-}
-
+        gallery.append(figure);
+        figure.appendChild(trashIcon);
+        figure.appendChild(arrowMoveIcon);   
+};  
+ } 
+    
 //appel de l'endpoints categories avec fetch//
 load_categories('http://localhost:5678/api/categories');
 async function load_categories(fname) {
@@ -60,7 +48,7 @@ async function load_categories(fname) {
         filter.append(button);
         button.setAttribute("data-categories", data[i].id);  
     }
-
+    // ajout partie filtres 
 const filterContainer = document.querySelector(".filters"),
 galleryItems = document.querySelectorAll(".image");
 
@@ -88,28 +76,38 @@ filterContainer.addEventListener("click", (event) =>{
 });
 }
 
+
+  // ajout/suppr class mode admin
 window.onload = function() {
     if (sessionStorage.getItem("token")){
         document.querySelector("#edit").classList.remove("hide");
         document.querySelector("#modifButton").classList.remove("hide");
         document.querySelector("#logout").classList.remove("hide");
         document.querySelector("#logBtn").classList.add("hide");
+        document.querySelector(".filters").classList.add("hide");
+                          
     }
 
   };
 
+      // suppr token pour logout
    document.getElementById("logout").addEventListener("click", function () {
     sessionStorage.clear(); 
     location.href = "index.html";
   });
 
+      //Vérifie si un token est stocké dans le localStorage 
+const token = localStorage.getItem("token");
+      //si connecté : affiche "logout" sur page d'accueil + fonction filtreNone
+if (token != undefined) {
+        clickTrash();
+      //sinon appelle la fonction userDisconnected
+}else{
+    userDisconnected();  
+}
 
-
-  
-
-
-//Partie fenêtre modale
-//Fonction pour ouvrir la modale
+      //Partie fenêtre modale
+      //Fonction pour ouvrir la modale
 const openModale = function (e) {
   e.preventDefault();
   modale = document.getElementById("sect-modale");
@@ -118,7 +116,7 @@ const openModale = function (e) {
   modale.querySelector("#cross").addEventListener("click", closeModale);
   modale.querySelector(".modale").addEventListener("click", stopPropagation);
 };
-//Fonction pour fermer la modale
+      //Fonction pour fermer la modale
 const closeModale = function (e) {
   e.preventDefault();
   modale.style.display = "none";
@@ -127,7 +125,7 @@ const closeModale = function (e) {
   modale.querySelector(".modale").removeEventListener("click", stopPropagation);
   removeImg();
 };
-//pour stopper la propagation de l'événement vers les éléments parents
+      //pour stopper la propagation de l'événement vers les éléments parents
 const stopPropagation= function (e) {
   e.stopPropagation();
 };
@@ -136,31 +134,10 @@ document.querySelectorAll(".modifier").forEach(a => {
   a.addEventListener("click", openModale);
 });
 
-//Fonction pour créer les cartes de la galerie dans la modale
-function createModaleCard (article) {
-  for (let i = 0; i < article.length; i++){
-      const figureElement = document.createElement("figure");
-      const imageElement = document.createElement("img");
-      imageElement.src = article[i].imageUrl;
-      imageElement.setAttribute("crossorigin", "anonymous"); //(pour le bug)
-      imageElement.setAttribute("alt", article[i].title);
-      const trashIcon = document.createElement("i");
-      trashIcon.classList.add("fa-solid", "fa-trash", "icone", "trash");
-      const arrowMoveIcon = document.createElement("i");
-      arrowMoveIcon.classList.add("fa-solid", "fa-arrows-up-down-left-right", "icone", "arrow");
-      const figcaptionElement = document.createElement("figcaption");
-      figcaptionElement.innerText = "éditer";
-      figureElement.setAttribute("data-id", article[i].id);
-      //DOM pour rattacher les éléments au html
-      document.querySelector(".modale-gallery").appendChild(figureElement);
-      figureElement.appendChild(imageElement);
-      figureElement.appendChild(figcaptionElement);
-      figureElement.appendChild(trashIcon);
-      figureElement.appendChild(arrowMoveIcon);
-  }
-};
+      //Fonction pour créer les cartes de la galerie dans la modale
 
-//Fonction pour interchanger de modale
+
+      //Fonction pour interchanger de modale
 const addPhotoButton = document.getElementById("bouton-ajouter");
 addPhotoButton.addEventListener("click", function() {
   switchModaleView(true);
@@ -186,13 +163,13 @@ function switchModaleView(isListeView) {
 };
 
 
-//Partie pour ajouter une image dans la galerie
+      //Partie pour ajouter une image dans la galerie
 const newImage = document.getElementById("bouton-search");
 const newImagePreview = document.getElementById("image-preview");
 const newObjetImage = document.getElementById("objet");
 const newTitleImage = document.getElementById("title-image");
 const validButton = document.getElementById("bouton-valider");
-//Fonction pour selectionner l'image
+      //Fonction pour selectionner l'image
 newImage.addEventListener("change", function() {
   const selectedFile = newImage.files[0];
   if (selectedFile) {
@@ -208,7 +185,7 @@ newImage.addEventListener("change", function() {
   }
 });
 
-//Fonction du changement de couleur du bouton valider quand image et titre sont présents
+      //Fonction du changement de couleur du bouton valider quand image et titre sont présents
 function updateButtonColor() {
   if(newTitleImage.value != "" && newImagePreview.firstChild) {
       validButton.style.backgroundColor = "#1D6154";
@@ -218,7 +195,7 @@ function updateButtonColor() {
 };
 newTitleImage.addEventListener("input", updateButtonColor)
 
-//Fonction pour "réinitialiser" image + titre + alertes quand on quitte/change la modale   
+      //"réinitialiser" image + titre + alertes quand on quitte/change la modale   
 function removeImg() {
   newTitleImage.value = "";
   const sendImage = document.getElementsByClassName("send-image");
@@ -234,17 +211,17 @@ validButton.addEventListener("click", (e) => {
   const addImageError = document.getElementById("add-image-error");
   addImageError.style.display = "flex";
   addImageError.style.color = "red";
-  // Vérifie si le champ du titre est vide
+      // champ du titre est vide
   if (newTitleImage.value === "") {
       addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Titre manquant`;
       return;
   }
-  //Vérifie si le champ image est vide
+      //champ image est vide
   if (!newImagePreview.firstChild) {
        addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Image manquante`;
       return;
   }
-  //Vérifie la taille de l'image
+      //taille de l'image
   const maxSize = 4 * 1024 * 1024; // 4 Mo en bytes
   const selectedFile = newImage.files[0];
   if (selectedFile.size > maxSize) {
@@ -253,7 +230,7 @@ validButton.addEventListener("click", (e) => {
   }
   updateButtonColor();
 
-  //Création de formData pour envoyer les données de la nouvelle image
+      //envoyer les données de la nouvelle image
   const formData = new FormData();
   formData.append("image", newImage.files[0]);
   formData.append("title", newTitleImage.value);
@@ -261,7 +238,7 @@ validButton.addEventListener("click", (e) => {
 
   fetch("http://localhost:5678/api/works", {
       method: "POST",
-      headers: {"Authorization": `Bearer ${token}`},
+      headers: {"Authorization": "Bearer " + sessionStorage.getItem("token")},
       body: formData,
   })
   .then(response => {
@@ -273,7 +250,7 @@ validButton.addEventListener("click", (e) => {
       const addImageOk = document.getElementById("add-image-error");
       addImageOk.innerHTML = `<i class="fa-solid fa-circle-check"></i> Image ajoutée avec succès !`;
       addImageOk.style.color = "green";
-      dynamicCard();
+      location.reload()
   })
   .catch(error => {
       console.error("Erreur", error);
@@ -282,19 +259,21 @@ validButton.addEventListener("click", (e) => {
 });
 
 
-//Partie pour supprimer une image de la galerie (au click de la poubelle)
+      //supprimer une image de la galerie (au click de la poubelle)
 function clickTrash() {
-const gallery = document.querySelector(".modale-gallery");
-gallery.addEventListener("click", (e) => {
-  if (e.target.classList.contains("fa-trash")) {
+  const gallery = document.querySelector(".modale-gallery");
+  gallery.addEventListener("click", (e) => {
+    if (e.target.classList.contains("fa-trash")) {
     const figure = e.target.closest("figure");
-    const dataId = figure.getAttribute("data-id");
+      const dataId = e.target.id;
       confirmDelete(figure, dataId);
-  }
-})
+        
+    }
+  })
 };
 
-//Fonctions pour confirmer/annuler la suppression d'une photo
+
+      //confirmer/annuler la suppression d'une photo
 function confirmDelete(figure, dataId) {
   const confirmDelete = document.getElementById("third-modale");
   confirmDelete.style.display = "flex";
@@ -318,27 +297,17 @@ function confirmDelete(figure, dataId) {
 };
 
 function deleteImage(id) {
+const token = sessionStorage.getItem("token");
 fetch(`http://localhost:5678/api/works/${id}`, {
   method: "DELETE",
   headers: { "Authorization": `Bearer ${token}` }
 })
   .then(response => {
     if (response.ok) {
-      dynamicCard();
+      location.reload()
     } else {
       alert("Erreur lors de la suppression de l'image");
     }
   })
 };
 
-//Fonction qui met à jour la galerie de manière dynamique à chaque ajout/suppression d'image
-function dynamicCard() {
-  fetch(`http://localhost:5678/api/works`)
-  .then((response) => {
-      if(response.ok) {
-          document.querySelector(".gallery").innerHTML = "";
-          document.querySelector(".modale-gallery").innerHTML = "";
-          fetchCard();
-      }
-  })
-};

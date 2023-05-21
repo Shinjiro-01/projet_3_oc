@@ -24,11 +24,11 @@
 <div class="header1">
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
-		<ul>
+		<ul id="nav_bar">
 			<li><a href="index.html">projets</a></li>
 			<li>contact</li>
-			<li><a href="login.html" id="logBtn">login</a></li>
-			<li><a id="logout" class="logout projet-menu hide">logout</a></li>
+			<li id="logBtn"><a href="login.html">login</a></li>
+			<li id="logout" class="hide"><a>logout</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -47,14 +47,16 @@
 		</article>
 	</section>
 	<section id="portfolio">
+		<div id="modifier">
 		<h2>Mes Projets</h2>
-		<a href="#" class="modifier" id="modifButton"><i class="fa-regular fa-pen-to-square"></i> modifier</a>
+		<a href="#" class="modifier hide" id="modifButton"><i class="fa-regular fa-pen-to-square"></i> modifier</a>
+	</div>
 
 
 
 <!-- partie filtres -->
 
-<div class="filters">
+<div class="filters" id="filtre-liste">
 	
 	<button class="filter_button active" data-categories="0">Tous</button>
 </div>

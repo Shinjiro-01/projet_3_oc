@@ -33,7 +33,7 @@ async function load_gallery(fname) {
 };  
  } 
     
-//appel de l'endpoints categories avec fetch//
+//appel de l'API categories avec fetch//
 load_categories('http://localhost:5678/api/categories');
 async function load_categories(fname) {
     var response = await fetch(fname)
@@ -55,10 +55,10 @@ galleryItems = document.querySelectorAll(".image");
 filterContainer.addEventListener("click", (event) =>{
   if(event.target.classList.contains("filter_button")){
 
-       // deactivate existing active 'filter-item'
+       // desactive filtre  'filter-item'
        filterContainer.querySelector(".active").classList.remove("active");
 
-       // activate new 'filter-item'
+       // active nouveau filtre 'filter-item'
        event.target.classList.add("active");
        const filterValue = event.target.getAttribute("data-categories");
        galleryItems.forEach((item) =>{
@@ -76,7 +76,6 @@ filterContainer.addEventListener("click", (event) =>{
 });
 }
 
-
   // ajout/suppr class mode admin
 window.onload = function() {
     if (sessionStorage.getItem("token")){
@@ -84,10 +83,8 @@ window.onload = function() {
         document.querySelector("#modifButton").classList.remove("hide");
         document.querySelector("#logout").classList.remove("hide");
         document.querySelector("#logBtn").classList.add("hide");
-        document.querySelector(".filters").classList.add("hide");
-                          
+        document.querySelector(".filters").classList.add("hide");                      
     }
-
   };
 
       // suppr token pour logout
@@ -98,12 +95,9 @@ window.onload = function() {
 
       //Vérifie si un token est stocké dans le localStorage 
 const token = localStorage.getItem("token");
-      //si connecté : affiche "logout" sur page d'accueil + fonction filtreNone
+//si connecté : affiche "logout" sur page d'accueil + fonction filtreNone
 if (token != undefined) {
-        clickTrash();
-      //sinon appelle la fonction userDisconnected
-}else{
-    userDisconnected();  
+  clickTrash();
 }
 
       //Partie fenêtre modale
@@ -134,9 +128,6 @@ document.querySelectorAll(".modifier").forEach(a => {
   a.addEventListener("click", openModale);
 });
 
-      //Fonction pour créer les cartes de la galerie dans la modale
-
-
       //Fonction pour interchanger de modale
 const addPhotoButton = document.getElementById("bouton-ajouter");
 addPhotoButton.addEventListener("click", function() {
@@ -162,13 +153,13 @@ function switchModaleView(isListeView) {
   }
 };
 
-
       //Partie pour ajouter une image dans la galerie
 const newImage = document.getElementById("bouton-search");
 const newImagePreview = document.getElementById("image-preview");
 const newObjetImage = document.getElementById("objet");
 const newTitleImage = document.getElementById("title-image");
 const validButton = document.getElementById("bouton-valider");
+
       //Fonction pour selectionner l'image
 newImage.addEventListener("change", function() {
   const selectedFile = newImage.files[0];
@@ -178,6 +169,7 @@ newImage.addEventListener("change", function() {
       img.src = imgUrl;
       newImagePreview.innerHTML = "";
       newImagePreview.appendChild(img);
+
       //supprime les autres éléments pour qu'il n'y ait que l'image
       const sendImage = document.getElementsByClassName("send-image");
       Array.from(sendImage).forEach(e => {e.style.display = "none"});
@@ -211,6 +203,7 @@ validButton.addEventListener("click", (e) => {
   const addImageError = document.getElementById("add-image-error");
   addImageError.style.display = "flex";
   addImageError.style.color = "red";
+
       // champ du titre est vide
   if (newTitleImage.value === "") {
       addImageError.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Titre manquant`;
@@ -272,7 +265,6 @@ function clickTrash() {
   })
 };
 
-
       //confirmer/annuler la suppression d'une photo
 function confirmDelete(figure, dataId) {
   const confirmDelete = document.getElementById("third-modale");
@@ -295,7 +287,7 @@ function confirmDelete(figure, dataId) {
       figure.remove();
   }
 };
-
+      // recupere token pour supprimer une img de l'api
 function deleteImage(id) {
 const token = sessionStorage.getItem("token");
 fetch(`http://localhost:5678/api/works/${id}`, {

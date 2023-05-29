@@ -12,10 +12,10 @@ async function load_gallery(fname) {
         figure.setAttribute("data-attributes", data[i].category.id);
         figure.innerHTML =  "<img src=" + data[i].imageUrl  + "> <figcaption>" + data[i].title + "</figcaption>";
         gallery.append(figure);
-        figure.classList.add("image");
-        
+        figure.classList.add("image");     
     }
     // création de la gallery de la modale 
+
     gallery = document.querySelector(".modale-gallery");
     for (i = 0; i < data.length; i++) {
         let figure = document.createElement("figure");
@@ -243,7 +243,14 @@ validButton.addEventListener("click", (e) => {
       const addImageOk = document.getElementById("add-image-error");
       addImageOk.innerHTML = `<i class="fa-solid fa-circle-check"></i> Image ajoutée avec succès !`;
       addImageOk.style.color = "green";
-      location.reload()
+      const element = document.querySelectorAll(".image");
+      for (let i = 0; i < element.length; i++) {
+        element[i].remove();
+
+    }
+      
+
+      load_gallery('http://localhost:5678/api/works');
   })
   .catch(error => {
       console.error("Erreur", error);
@@ -296,7 +303,11 @@ fetch(`http://localhost:5678/api/works/${id}`, {
 })
   .then(response => {
     if (response.ok) {
-      location.reload()
+      const element = document.querySelectorAll(".image");
+      for (let i = 0; i < element.length; i++) {
+        element[i].remove();
+    }
+      load_gallery('http://localhost:5678/api/works');
     } else {
       alert("Erreur lors de la suppression de l'image");
     }

@@ -55,7 +55,7 @@ galleryItems = document.querySelectorAll(".image");
 filterContainer.addEventListener("click", (event) =>{
   if(event.target.classList.contains("filter_button")){
 
-       // desactive filtre  'filter-item'
+       // desactive ancien filtre  'filter-item'
        filterContainer.querySelector(".active").classList.remove("active");
 
        // active nouveau filtre 'filter-item'
@@ -95,7 +95,7 @@ window.onload = function() {
 
       //Vérifie si un token est stocké dans le localStorage 
 const token = localStorage.getItem("token");
-//si connecté : affiche "logout" sur page d'accueil + fonction filtreNone
+
 if (token != undefined) {
   clickTrash();
 }
